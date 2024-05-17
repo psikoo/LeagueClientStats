@@ -17,6 +17,10 @@ let serverName = localStorage.getItem("serverName");
 let serverURL = localStorage.getItem("serverURL");
 let serverRegionURL = localStorage.getItem("serverRegionURL");
 
+let splashArt = localStorage.getItem("splashArt");
+
+let dragonVersion = localStorage.getItem("dragonVersion");
+
 let PUUID = localStorage.getItem("PUUID");
 let gameName = localStorage.getItem("gameName");
 let tag = localStorage.getItem("tag");
@@ -34,11 +38,20 @@ function setSettings(settings){
     localStorage.setItem('serverName', settings.serverName);
     localStorage.setItem('serverURL', resolveServerURL(settings.serverName));
     localStorage.setItem('serverRegionURL', resolveRegionURL(settings.serverName));
+
+    localStorage.setItem('splashArt', settings.splashArt);
+    
+    localStorage.setItem('dragonVersion', settings.dragonVersion);
 }
 
 setTitle();
 function setTitle(){
     document.title = `${gameName}#${tag}'s stats`;
+}
+
+setBG();
+function setBG(){
+    document.getElementById("bgImage").setAttribute("src", `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${splashArt}.jpg`);
 }
 
 getPUUID();
@@ -59,7 +72,7 @@ async function getUsername() {
     .catch((error) => {
         console.log(`ERROR: ${error}`);
     });
-    document.getElementById("username").innerHTML = `Username: ${Username}`;
+    document.getElementById("username").innerHTML = `${Username}`;
 }
 
 getIconAndLevel();
@@ -72,8 +85,9 @@ async function getIconAndLevel() {
     const profileIconId = iconAndLevel.profileIconId;
     const summonerLevel = iconAndLevel.summonerLevel;
 
-    favicon.setAttribute("href", `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/${profileIconId}.png`);
-    document.getElementById("summonerLevel").innerHTML = `Summoner Level: ${summonerLevel}`;
+    favicon.setAttribute("href", `https://ddragon.leagueoflegends.com/cdn/${dragonVersion}/img/profileicon/${profileIconId}.png`);
+    document.getElementById("profileIcon").setAttribute("src", `https://ddragon.leagueoflegends.com/cdn/${dragonVersion}/img/profileicon/${profileIconId}.png`);
+    document.getElementById("summonerLevel").innerHTML = `${summonerLevel}`;
 
     localStorage.setItem('profileIconId', profileIconId);
     localStorage.setItem('summonerLevel', summonerLevel);
