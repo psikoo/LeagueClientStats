@@ -4,38 +4,58 @@ getSettings();
 async function getSettings() {
     fetch("./settings.json")
     .then((res) => res.json())
-    .then((settings) => {
-        setTitle(settings.gameName, settings.tag);
-        
-        console.log(getPUUID(settings.APIKey, settings.serverName, settings.gameName, settings.tag))
+    .then((data) => {
+        setSettings(data);
     }).catch((error) => {
         console.log(`ERROR: ${error}`);
     });
 }
 
-function setTitle(gameName, tag){
+let targetProxy = localStorage.getItem("targetProxy");
+
+let PUUID = localStorage.getItem("PUUID");
+let gameName = localStorage.getItem("gameName");
+let tag = localStorage.getItem("tag");
+
+let serverName = localStorage.getItem("serverName");
+let serverURL = localStorage.getItem("serverURL");
+let serverRegionURL = localStorage.getItem("serverRegionURL");
+
+
+function setSettings(settings){
+    //localStorage.setItem('targetProxy', settings.targetProxy);
+    localStorage.setItem('targetProxy', "http://localhost:3000");
+
+    localStorage.setItem('gameName', settings.gameName);
+    localStorage.setItem('tag', settings.tag);
+
+    localStorage.setItem('serverName', settings.serverName);
+    localStorage.setItem('serverURL', resolveServerURL(settings.serverName));
+    localStorage.setItem('serverRegionURL', resolveRegionURL(settings.serverName));
+}
+
+setTitle();
+function setTitle(){
     document.title = `${gameName}#${tag}'s stats`;
 }
 
-async function getPUUID(APIKey, serverName, gameName, tag) {
-    var PUUID = "Failed to retrieve PUUID";
-    console.log(`https://${resolveRegionURL(serverName)}/riot/account/v1/accounts/by-riot-id/${gameName}/${tag}?api_key=${APIKey}`);
-    await fetch(`https://${resolveRegionURL(serverName)}/riot/account/v1/accounts/by-riot-id/${gameName}/${tag}?api_key=${APIKey}`, {
-        method: "GET",
-        mode: "cors",
-        headers: {
-            "Accept": "	text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-            "Access-Control-Allow-Origin": "*"
-        },
-    })
-    .then((res) =>  {console.log(res)})
+getPUUID();
+async function getPUUID() {
+    const PUUID = await fetch(`${targetProxy}/getPUUID?region=${serverRegionURL}&gameName=${gameName}&tag=${tag}`)
+    .then((res) => res.json())
     .catch((error) => {
         console.log(`ERROR: ${error}`);
     });
-
-    return PUUID;
+    document.getElementById("puuid").innerHTML = `User PUUID: ${PUUID}`;
+    localStorage.setItem('PUUID', PUUID);
 }
 
-
-
-//euw1.api.riotgames.com/riot/account/v1/accounts/by-riot-id/psikoo/miau?api_key=RGAPI-1643052f-39b4-42c6-bdd1-26bae937d3e9
+getUsername();
+async function getUsername() {
+    const Username = await fetch(`${targetProxy}/getRiotID?region=${serverRegionURL}&PUUID=${PUUID}`)
+    .then((res) => res.json())
+    .catch((error) => {
+        console.log(`ERROR: ${error}`);
+    });
+    document.getElementById("username").innerHTML = `Username: ${Username}`;
+}

@@ -1,4 +1,5 @@
 {
+    "targetProxy": "https://leaguestatsproxy.onrender.com",
     "gameName":"psikoo",
     "tag": "miau",
     "serverName": "EUW"
