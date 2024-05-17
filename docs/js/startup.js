@@ -25,8 +25,8 @@ let profileIconId = localStorage.getItem('profileIconId');
 let summonerLevel = localStorage.getItem('summonerLevel');
 
 function setSettings(settings){
-    //localStorage.setItem('targetProxy', settings.targetProxy);
-    localStorage.setItem('targetProxy', "http://localhost:3000");
+    localStorage.setItem('targetProxy', settings.targetProxy);
+    //localStorage.setItem('targetProxy', "http://localhost:3000");
 
     localStorage.setItem('gameName', settings.gameName);
     localStorage.setItem('tag', settings.tag);
