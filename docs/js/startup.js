@@ -13,14 +13,16 @@ async function getSettings() {
 
 let targetProxy = localStorage.getItem("targetProxy");
 
-let PUUID = localStorage.getItem("PUUID");
-let gameName = localStorage.getItem("gameName");
-let tag = localStorage.getItem("tag");
-
 let serverName = localStorage.getItem("serverName");
 let serverURL = localStorage.getItem("serverURL");
 let serverRegionURL = localStorage.getItem("serverRegionURL");
 
+let PUUID = localStorage.getItem("PUUID");
+let gameName = localStorage.getItem("gameName");
+let tag = localStorage.getItem("tag");
+
+let profileIconId = localStorage.getItem('profileIconId');
+let summonerLevel = localStorage.getItem('summonerLevel');
 
 function setSettings(settings){
     //localStorage.setItem('targetProxy', settings.targetProxy);
@@ -58,4 +60,21 @@ async function getUsername() {
         console.log(`ERROR: ${error}`);
     });
     document.getElementById("username").innerHTML = `Username: ${Username}`;
+}
+
+getIconAndLevel();
+async function getIconAndLevel() {
+    const iconAndLevel = await fetch(`${targetProxy}/getIconAndLevel?server=${serverURL}&PUUID=${PUUID}`)
+    .then((res) => res.json())
+    .catch((error) => {
+        console.log(`ERROR: ${error}`);
+    });
+    const profileIconId = iconAndLevel.profileIconId;
+    const summonerLevel = iconAndLevel.summonerLevel;
+
+    favicon.setAttribute("href", `https://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/${profileIconId}.png`);
+    document.getElementById("summonerLevel").innerHTML = `Summoner Level: ${summonerLevel}`;
+
+    localStorage.setItem('profileIconId', profileIconId);
+    localStorage.setItem('summonerLevel', summonerLevel);
 }
