@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS is required to view this page</title>
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
+    <link rel="stylesheet" type="text/css" href="./css/hr.css">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link id="favicon" rel="icon" type="image/png" href="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/0.png" />
   </head>
   <body>
     <script type="module" src="./js/startup.js"></script>
+    <script type="module" src="./js/eventlistner.js"></script>
+    <script type="module" src="./js/getgamedata.js"></script>
+
     <div class="page">
       <div class="bg">
         <div class="sidebar">
@@ -21,24 +26,79 @@
   
       <div class="fg">
         <div class="sidebar">
-          <div class="summoner">
+          <div class="summoner roboto">
             <div class="pfp">
               <div class="icon">
-                <img id="profileIcon" src="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/0.png" alt="profileIcon">
+                <img id="profileIcon" src="https://ddragon.leagueoflegends.com/cdn/14.10.1/img/profileicon/0.png" alt="profileIcon" title="puuid">
               </div>
             </div>
+
             <hr class="rounded">
+            
             <div class="level">
-              <p id="summonerLevel">summonerLevel</p>
+              <p id="summonerLevel">Loading</p>
             </div>
             <div class="username">
-              <p id="username">username</p>
+              <p id="riotID">Proxy might be down, starting up (20s)</p>
             </div>
           </div>
-          <p id="puuid">puuid</p>
         </div>
+
         <div class="rightSide">
+          <div id="updateUserButton" class="updateButton">
+            <button type="button">
+              <span class="small-roboto">UPDATE USER</span>
+            </button>       
+          </div>
+          <div class="gameName">
+            <label for="gameName">gameName:</label>
+            <input type="text" id="gameName" name="gameName">
+          </div>
+          <div class="tag">
+            <label for="tag">tag:</label>
+            <input type="text" id="tag" name="tag">
+          </div>
+          <div class="serverName">
+            <label for="serverName">serverName:</label>
+            <input type="text" id="serverName" name="serverName">
+          </div>
+          <div class="splashArt">
+            <label for="splashArt">splashArt:</label>
+            <input type="text" id="splashArt" name="splashArt">
+          </div>
+
+          <hr>
           
+          <div id="updateButton" class="updateButton">
+            <button type="button">
+              <span class="small-roboto">UPDATE</span>
+            </button>       
+          </div>
+          <div class="options">
+            <div class="startTime">
+              <label for="startTime">startTime:</label>
+              <input type="number" id="startTime" name="startTime"> 
+            </div>
+            <div class="endTime">
+              <label for="endTime">endTime:</label>
+              <input type="number" id="endTime" name="endTime"> 
+            </div>
+            <div class="type">
+              <label for="type">type:</label>
+              <input type="text" id="type" name="type">
+            </div>
+            <div class="start">
+              <label for="start">start:</label>
+              <input type="number" id="start" name="start"> 
+            </div>
+            <div class="count">
+              <label for="count">count:</label>
+              <input type="number" id="count" name="count"> 
+            </div>
+          </div>
+          <p id="matchesID">
+            Input data and click update
+          </p>
         </div>
       </div>
     </div>

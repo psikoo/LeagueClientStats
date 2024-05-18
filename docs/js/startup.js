@@ -1,33 +1,19 @@
-import { resolveServerURL, resolveRegionURL } from './util.js'
+import { resolveServerURL, resolveRegionURL } from './util.js';
 
-getSettings();
+// Get the default settings from the settings.json file
+await getSettings();
 async function getSettings() {
     fetch("./settings.json")
     .then((res) => res.json())
     .then((data) => {
+        // Store the settings in local storage
         setSettings(data);
     }).catch((error) => {
         console.log(`ERROR: ${error}`);
     });
 }
 
-let targetProxy = localStorage.getItem("targetProxy");
-
-let serverName = localStorage.getItem("serverName");
-let serverURL = localStorage.getItem("serverURL");
-let serverRegionURL = localStorage.getItem("serverRegionURL");
-
-let splashArt = localStorage.getItem("splashArt");
-
-let dragonVersion = localStorage.getItem("dragonVersion");
-
-let PUUID = localStorage.getItem("PUUID");
-let gameName = localStorage.getItem("gameName");
-let tag = localStorage.getItem("tag");
-
-let profileIconId = localStorage.getItem('profileIconId');
-let summonerLevel = localStorage.getItem('summonerLevel');
-
+// Store the settings read from settings.json in local storage
 function setSettings(settings){
     localStorage.setItem('targetProxy', settings.targetProxy);
     //localStorage.setItem('targetProxy', "http://localhost:3000");
@@ -43,40 +29,59 @@ function setSettings(settings){
     
     localStorage.setItem('dragonVersion', settings.dragonVersion);
 }
+let targetProxy = localStorage.getItem("targetProxy");
+let dragonVersion = localStorage.getItem("dragonVersion");
 
-setTitle();
-function setTitle(){
+// Render the current settings stored in local memory to the webpage
+await setup(localStorage.getItem("gameName"), localStorage.getItem("tag"), localStorage.getItem("splashArt"));
+export async function setup(gameName, tag, splashArt) {
+    setTitle(gameName, tag);
+    setBG(splashArt);
+
+    await getPUUID(localStorage.getItem("serverRegionURL"), gameName, tag);
+    await getUsername(localStorage.getItem("serverRegionURL"), localStorage.getItem("PUUID"));
+    await getIconAndLevel(localStorage.getItem("serverURL"), localStorage.getItem("PUUID"));
+}
+
+// Sets the title of the webpage to the users RiotID
+function setTitle(gameName, tag){
     document.title = `${gameName}#${tag}'s stats`;
 }
 
-setBG();
-function setBG(){
+// Sets the background of the webpage to the one saved in local memory
+function setBG(splashArt){
     document.getElementById("bgImage").setAttribute("src", `https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${splashArt}.jpg`);
 }
 
-getPUUID();
-async function getPUUID() {
+// Gets the PUUID of the given RiotID
+// Saves PUUID in local memory
+// Display the PUUID as a profileIcon title
+async function getPUUID(serverRegionURL, gameName, tag) {
     const PUUID = await fetch(`${targetProxy}/getPUUID?region=${serverRegionURL}&gameName=${gameName}&tag=${tag}`)
     .then((res) => res.json())
     .catch((error) => {
         console.log(`ERROR: ${error}`);
     });
-    document.getElementById("puuid").innerHTML = `User PUUID: ${PUUID}`;
+    if(PUUID != undefined) { document.getElementById("profileIcon").setAttribute("title", `User PUUID: ${PUUID}`) };
     localStorage.setItem('PUUID', PUUID);
 }
 
-getUsername();
-async function getUsername() {
-    const Username = await fetch(`${targetProxy}/getRiotID?region=${serverRegionURL}&PUUID=${PUUID}`)
+// Gets the RiotID of the given PUUID
+// Saves PUUID in local memory
+// Display the RiotID
+async function getUsername(serverRegionURL, PUUID) {
+    const riotID = await fetch(`${targetProxy}/getRiotID?region=${serverRegionURL}&PUUID=${PUUID}`)
     .then((res) => res.json())
     .catch((error) => {
         console.log(`ERROR: ${error}`);
     });
-    document.getElementById("username").innerHTML = `${Username}`;
+    if(riotID != undefined) { document.getElementById("riotID").innerHTML = `${riotID}` };
 }
 
-getIconAndLevel();
-async function getIconAndLevel() {
+// Gets the profileIconId and summonerLevel of the given PUUID
+// Saves profileIconId and summonerLevel in local memory
+// Display the profileIconId and summonerLevel
+async function getIconAndLevel(serverURL, PUUID) {
     const iconAndLevel = await fetch(`${targetProxy}/getIconAndLevel?server=${serverURL}&PUUID=${PUUID}`)
     .then((res) => res.json())
     .catch((error) => {
@@ -87,7 +92,7 @@ async function getIconAndLevel() {
 
     favicon.setAttribute("href", `https://ddragon.leagueoflegends.com/cdn/${dragonVersion}/img/profileicon/${profileIconId}.png`);
     document.getElementById("profileIcon").setAttribute("src", `https://ddragon.leagueoflegends.com/cdn/${dragonVersion}/img/profileicon/${profileIconId}.png`);
-    document.getElementById("summonerLevel").innerHTML = `${summonerLevel}`;
+    if(summonerLevel != undefined) { document.getElementById("summonerLevel").innerHTML = `${summonerLevel}` };
 
     localStorage.setItem('profileIconId', profileIconId);
     localStorage.setItem('summonerLevel', summonerLevel);
