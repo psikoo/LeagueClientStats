@@ -1,2 +1,2 @@
 # LeagueClientStats
- Analize and host your league stats
+ Basic tool to interact with the league of legends api
