@@ -1,5 +1,5 @@
 {
-    "targetProxy": "http://192.168.0.40:3000/",
+    "targetProxy": "http://192.168.0.40:3000",
     "gameName":"psikoo",
     "tag": "miau",
     "serverName": "EUW",
