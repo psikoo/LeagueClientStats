@@ -1,5 +1,5 @@
 {
-    "targetProxy": "http://quenecesitas.net:3000",
+    "targetProxy": "https://quenecesitas.net:3000",
     "gameName":"psikoo",
     "tag": "miau",
     "serverName": "EUW",
