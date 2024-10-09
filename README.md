@@ -1,4 +1,4 @@
-# ⚠ WIP
+# ⚠ WIP (webiste and api under construction)
 # LeagueClientStats
  Basic tool to interact with the league of legends api
 
